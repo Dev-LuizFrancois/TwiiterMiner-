@@ -1,0 +1,554 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Bootstrap includes-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.0/font/bootstrap-icons.css">
+    
+    <!-- JS include -->
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
+    <title>Tweet Miner</title>
+
+    <link rel="stylesheet" href="css/estilos.css">
+    <link href='https://fonts.googleapis.com/css?family=Quicksand:300,400,700' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Lato:400,300' rel='stylesheet' type='text/css'>
+    <link href="https://netdna.bootstrapcdn.com/font-awesome/3.1.1/css/font-awesome.css" rel="stylesheet">
+
+    <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js'></script>
+    <script type='text/javascript' src='https://platform.twitter.com/widgets.js'></script>
+
+
+    <style>
+        * {
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box; }
+
+
+            header {
+            display: block;
+            overflow: hidden;
+            position: relative;
+            padding-bottom: 2em;
+            -moz-border-radius-topleft: 8px;
+            -webkit-border-top-left-radius: 8px;
+            border-top-left-radius: 8px;
+            -moz-border-radius-topright: 8px;
+            -webkit-border-top-right-radius: 8px;
+            border-top-right-radius: 8px; }
+
+            .container {
+            width: 380px;
+            margin: 3em auto 1em auto;
+            -webkit-border-radius: 8px;
+            -moz-border-radius: 8px;
+            -ms-border-radius: 8px;
+            -o-border-radius: 8px;
+            border-radius: 8px;
+            padding-bottom: 1.5em;
+            background-color: #dde1e2;
+            -webkit-box-shadow: #bdc3c7 0 5px 5px;
+            -moz-box-shadow: #bdc3c7 0 5px 5px;
+            box-shadow: #bdc3c7 0 5px 5px; }
+
+            .container-btns {
+            width: 380px;
+            height:300px;
+            margin: 3em auto 1em auto;
+            -webkit-border-radius: 8px;
+            -moz-border-radius: 8px;
+            -ms-border-radius: 8px;
+            -o-border-radius: 8px;
+            border-radius: 8px;
+            padding-bottom: 1.5em;
+            background-color: #dde1e2;
+            -webkit-box-shadow: #bdc3c7 0 5px 5px;
+            -moz-box-shadow: #bdc3c7 0 5px 5px;
+            box-shadow: #bdc3c7 0 5px 5px; }
+
+
+            .bg {
+            border-bottom: 8px solid #5cc0ff; }
+
+            .bio:hover > .desc {
+            cursor: pointer;
+            opacity: 1;
+            z-index:100; }
+
+            .avatarcontainer {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            left: 0;
+            top: -0.5rem;
+            margin: auto;
+            width: 70px;
+            height: 70px;
+            display: block; }
+            .avatarcontainer:hover > .hover {
+                opacity: 1; }
+
+            .avatar {
+            width: 100%;
+            border: 8px solid #5cc0ff;
+            -webkit-border-radius: 50%;
+            -moz-border-radius: 50%;
+            -ms-border-radius: 50%;
+            -o-border-radius: 50%;
+            border-radius: 50%;
+            overflow: hidden;
+            position: relative; }
+            .avatar img {
+                width: 65px;
+                height: 65px; }
+            .avatar:hover + .hover {
+                opacity: 1;
+                cursor: pointer; }
+
+            .hover {
+            position: absolute;
+            cursor: pointer;
+            width: 100%;
+            height: 100%;
+            background-color: #3498db;
+            top: 0;
+            font-size: 1.8em;
+            text-align: center;
+            color: white;
+            padding-top: 18%;
+            opacity: 0;
+            font-family: 'FontAwesome';
+            font-weight: 300;
+            border: 8px solid #5cc0ff;
+            -webkit-border-radius: 50%;
+            -moz-border-radius: 50%;
+            -ms-border-radius: 50%;
+            -o-border-radius: 50%;
+            border-radius: 50%;
+            -webkit-transition-property: all;
+            -moz-transition-property: all;
+            -o-transition-property: all;
+            transition-property: all;
+            -webkit-transition-duration: 0.5s;
+            -moz-transition-duration: 0.5s;
+            -o-transition-duration: 0.5s;
+            transition-duration: 0.5s;
+            -webkit-transition-timing-function: ease;
+            -moz-transition-timing-function: ease;
+            -o-transition-timing-function: ease;
+            transition-timing-function: ease; }
+            
+            .name_data {
+                color: #81878b; }
+
+            .data {
+            margin-top: .6em;
+            color: #81878b; }
+            .data li {
+                width: 32%;
+                text-align: center;
+                display: inline-block;
+                font-size: 1.2em;
+                font-family: 'Lato';
+                border-right: solid 1px #bdc3c7; }
+                .data li:last-child {
+                border: none; }
+                .data li span {
+                display: block;
+                text-transform: uppercase;
+                font-family: 'Quicksand';
+                font-size: .5em;
+                margin-top: .6em;
+                font-weight:700;
+                }
+
+            .desc {
+            position: absolute;
+            top: 0;
+            background-color: rgba(0, 0, 0, 0.6);
+            width: 100%;
+            height: 200px;
+            padding: 1.2em 1em 0 1em;
+            color: white;
+            text-align: center;
+            opacity: 0;
+            -webkit-transition-property: all;
+            -moz-transition-property: all;
+            -o-transition-property: all;
+            transition-property: all;
+            -webkit-transition-duration: 0.3s;
+            -moz-transition-duration: 0.3s;
+            -o-transition-duration: 0.3s;
+            transition-duration: 0.3s;
+            -webkit-transition-timing-function: ease-in;
+            -moz-transition-timing-function: ease-in;
+            -o-transition-timing-function: ease-in;
+            transition-timing-function: ease-in; }
+            .desc h3 {
+                font-family: "Lato";
+                font-size: 1.2em;
+                margin-bottom: .5em; }
+            .desc p {
+                font-size: .9em;
+                font-family: 'Quicksand';
+                line-height: 1.5em; }
+
+    </style>
+
+        <!-- Bootstrap JS -->
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.6.0/dist/umd/popper.min.js" integrity="sha384-KsvD1yqQ1/1+IA7gi3P0tyJcT3vR+NdBTt13hSJ2lnve8agRGXTTyNaBYmCR/Nwi" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.min.js" integrity="sha384-nsg8ua9HAw1y0W1btsyWgBklPnCUAFLuTMS2G72MMONqmOymq585AcH49TLBQObG" crossorigin="anonymous"></script>
+
+        <!-- Navigation-->
+    </head>
+    <body>
+
+        
+
+        <div class="container-fluid" style="margin-top:10rem; margin-left:40rem;" id="app-logo">
+            <img src="http://127.0.0.1:5000/static/img/logo.svg"  alt="..." width="150">
+        </div>
+
+        
+
+
+        <div class="container-fluid" >
+            <div class="row">
+                <div class="col">
+                    <!-- INFO -->
+                        <button type="button" class="btn btn-primary" style="margin-top:2rem; margin-left:6rem;">
+                            Tweets Fetched: <span class="badge bg-secondary">{{session["num_tweets"]}}</span>
+                        </button>
+
+                        <div class="accordion" id="info-accordion" style="margin-top:2rem; width: 420px; background-color: #dde1e2;">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingOne">
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                        <i class="bi bi-clipboard-data">  Data Collected:</i>   
+                                    </button>
+                                </h2>
+                                <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#headingOne">
+                                    <div class="accordion-body">
+                                        <p><strong>- Most Used #: </strong> the top 5 most used hashtags by this user, aswell as the number of times they were used.</p>
+                                        <p><strong>- Most Interected @: </strong> the top 5 Twitter users whose {{session["user_name"]}} interacted with. By interaction we considered responses, retweets and mentions.</p>
+                                        <p><strong>- Most Common Word: </strong> we read every single word that has been typed on those {{session["num_tweets"]}} tweets. Here we will show the top 5 most used words by {{session["user_name"]}}. We also let you filter words, in case you think a word doesn't deserve to be on the podium!</p>
+                                        <p><strong>- Most Liked Tweets: </strong> the top 5 most liked tweets.</p>
+                                        <p><strong>- Most Retweeted Tweets: </strong> the top 5 most liked tweets. </p>
+                                        <p> * Tweeter API limits how many tweets we can read. Therefore, all data is relative to the number off tweets fetched. if the user hasn´t tweeted enough to make for the top 5, all the elements will appear. </p>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    {% if session["status"] != 0 %}
+                        <div class="container-fluid" style="margin-left:8rem; margin-top:2rem;">
+                            <form method ="post" action="/tweetMiner/res">
+                                <button class="btn btn-primary" type="submit" name="profile" value="profile"><i class="bi bi-person-circle">  Profile</i></button>
+                            </form>
+                        </div>
+                    {% endif %}
+
+                    <div class="container-fluid" style="margin-left:8.25rem; margin-top:2rem;">
+                        <a class="btn btn-primary" href="http://127.0.0.1:5000/" style="align-item: center;" role="button"><i class="bi bi-arrow-left-circle-fill"> Back</i></a>
+                    </div>
+                </div>
+                
+                <div class="col">
+                <!-- ANALITICS -->
+                    {% if session["status"] == 0 %}
+                    <!-- PROFILE -->
+                        <div class="container mx-auto" style=" margin-top:2rem;">
+                            <header>
+                                <div class="bio">
+                                    <div class="container-fluid" style="background-color: #dde1e2; height:100px;"></div>
+                                    <div class="desc">
+                                        <p>{{session["description"]}}</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="avatarcontainer">
+                                    <img src={{session["user_avatar"]}} alt="avatar" class="avatar">
+                                    <div class="hover">
+                                        <div class="icon-twitter"></div>
+                                    </div>
+                                </div>
+
+                            </header>
+                            <div class="name_data" style="text-align: center; top:-0.4rem;"><span style="font-family: 'Quicksand'; font-weight:700; top:-0.4rem;">{{"@"+session["user_name"]}}</span></div>
+                            <div class="content">
+                            <div class="data">
+                                <ul>
+                                <li>
+                                    {{session["num_tweets"]}}
+                                    <span>Tweets</span>
+                                </li>
+                                <li>
+                                    {{session["num_followers"]}}
+                                    <span>Followers</span>
+                                </li>
+                                <li>
+                                    {{session["num_following"]}}
+                                    <span>Following</span>
+                                </li>
+                                </ul>
+                            </div>
+
+                            <div class="container-fluid" style="margin-left:6.2rem; "><a class="btn btn-primary" href="http://twitter.com/{{session["user_name"]}}"> <div class="icon-twitter"></div>Visit Site</a></div>
+                            </div>
+                        </div>
+                    {% endif  %}
+
+                    <!-- MOST HASHTAGS -->
+                    {% if session["status"] == 1 %}
+                        {% if (session["most_hash"])|length  == 0 %}
+                            <div class="container-fluid" style="margin-top:2rem;">
+                                <div class="alert alert-warning d-flex align-items-center" role="alert" style="width-auto margin-left:19rem;">
+                                    <div>
+                                        <i class="bi bi-exclamation-circle"> This user seems to have not tweeted any hashtags yet!</i>
+                                    </div>
+                                </div>
+                            </div>
+                        {% else %}
+                            
+                            <div class="container-fluid" style="margin-top:2rem;">
+                                <button type="button" class="list-group-item list-group-item-action active" aria-current="true">
+                                <i class="bi bi-hash"> Most Used hashtag:</i> 
+                                </button>
+                                <ol class="list-group list-group-numbered">
+                                    {% for h in session["most_hash"] %}
+                                        <li class="list-group-item d-flex justify-content-between align-items-start" style="background-color: #dde1e2;">
+                                            <div class="ms-2 me-auto">
+                                                <div class="fw-bold" style="font-family: 'Quicksand'; font-weight:700; color: #81878b;">{{"#" + h[0] }}</div>
+                                            </div>
+                                            <span class="badge bg-primary rounded-pill">{{ h[1] }}</span>
+                                        </li>
+                                    {% endfor %}
+                                </ol>
+                            </div>
+                        {% endif  %}
+                    {% endif  %}
+
+                    <!-- MOST INTERACTIONS -->
+                    {% if session["status"] == 3 %}
+                        {% if (session["most_inter"])|length  == 0 %}
+                            <div class="container-fluid" style="margin-top:2rem;">
+                                <div class="alert alert-warning d-flex align-items-center" role="alert" style=" width-auto margin-left:19rem;">
+                                    <div>
+                                        <i class="bi bi-exclamation-circle">  This user seems to have not interected with anyone!</i>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        {% else %}
+                            <div class="container-fluid" style="margin-top:2rem;">
+                                <button type="button" class="list-group-item list-group-item-action active" aria-current="true">
+                                    <i class="bi bi-people">  People {{session["user_name"]}} most interacted with:</i>  
+                                </button>
+                                    {% for i in range(session["most_inter"]|length) %}
+                                            <div class="container" style="margin:1rem;">
+                                                    <div class="avatarcontainer" style="position: relative; top: 0.8rem; margin-left:0rem;">
+                                                        <img src={{((session["most_inter"])[i])[1]}} alt="avatar" class="avatar">
+                                                        <div class="hover">
+                                                            <div class="icon-twitter"></div>
+                                                        </div>
+                                                    <div class="name_data" style="position: relative; top:-3rem; text-align: center; left:6rem;"><span style="font-family: 'Quicksand'; font-weight:700;">{{"@"+((session["most_inter"])[i])[0]}}</span></div>
+                                                    <span class="badge bg-primary rounded-pill" style="position: relative; top:-4.5rem; text-align: center; left:17rem;">{{ ((session["most_inter"])[i])[2] }}</span>
+                                                    </div>
+                                            </div>
+                                            
+                                    {% endfor %}
+                            </div>
+                        {% endif  %}
+                    {% endif  %}
+
+                    <!-- MOST WORDS -->
+                    {% if session["status"] == 2 %}
+                        {% if (session["most_word"])|length  == 0 %}
+                            <div class="container-fluid" style="margin-top:2rem;">
+                                <div class="alert alert-warning d-flex align-items-center" role="alert" style="width-auto margin-left:19rem;">
+                                    <div>
+                                        <i class="bi bi-exclamation-circle"> There are no words avaiable at this range or with those filters!</i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="container-fluid" style="margin-left:10rem; margin-top:2rem;">
+                                <form method ="post" action="/tweetMiner/res">
+                                    <button class="btn btn-primary" type="submit" name="back_most_word" value="back_most_word"><i class="bi bi-chevron-left">  Back</i></button>
+                                </form>
+                            </div>
+
+                        {% else %}
+                            
+                            <div class="container-fluid" style="margin-top:2rem;">
+                                <button type="button" class="list-group-item list-group-item-action active" aria-current="true">
+                               <i class="bi bi-chat-quote">  Most used words by {{session["user_name"]}}:</i> 
+                                </button>
+                                <ol class="list-group list-group-numbered">
+                                    {% for i in range(session["most_word"]|length) %}
+                                        <li class="list-group-item d-flex justify-content-between align-items-start" style="background-color: #dde1e2;">
+                                            <div class="ms-2 me-auto">
+                                                {% if i  != 0 %}
+                                                    <div class="fw-bold" style="font-family: 'Quicksand'; font-weight:700; color: #81878b;">{{(i+1)}} .   {{((session["most_word"])[i])[0] }}</div>
+                                                {% else %}
+                                                    <div class="fw-bold" style="font-family: 'Quicksand'; font-weight:700; color: #81878b;"><i class="bi bi-trophy">  .  {{((session["most_word"])[i])[0]}}</i></div>
+                                                {% endif %}
+                                            </div>
+                                            <span class="badge bg-primary rounded-pill">{{ ((session["most_word"])[i])[1] }}</span>
+                                        </li>
+                                    {% endfor %}
+                                </ol>
+
+                                <div class="container-fluid" style="margin-top:1rem;">
+                                    <form method ="post" action="/tweetMiner/res">
+
+                                        <label for="words_len" class="form-label"><i class="bi bi-chat-dots">Words Minimum Size</i></label>
+                                        <input type="range" class="form-range" min="0" max="10" step="1" name="words_len" id="words_len">
+
+                                        <div class="mb-3">
+                                            <label for="filters" class="form-label"><i class="bi bi-funnel">Filtered Words</i></label>
+                                            <textarea class="form-control" name="filters" id="filters" rows="3"></textarea>
+                                        </div>
+                                                
+                                        <div class="form-check" style="position:relative top:-2rem; left:12rem;" >
+                                            <input class="form-check-input" type="checkbox" name="filter_on" value="filter_on" id="filter_check">
+                                            <label class="form-check-label" for="flexCheckDefault">Filter</label>
+                                            <button type="button"  class="btn btn-outline-secondary btn-sm" style="position;relative; margin-top:-2rem; margin-left:15rem;" data-bs-container="body" data-bs-toggle="info" data-bs-placement="right" data-bs-content="If ypu wish to filter words, type them with spaces in between and no comma."><i class="bi bi-info-circle" ></i></button>
+                                        </div>
+
+                                        <button class="btn btn-primary" style="position:relative; left:6rem;" type="submit" name="most_word" value="most_word">Go</button>
+                                    </form>
+                                </div>
+
+
+                            </div>
+                        {% endif  %}
+                    {% endif  %}
+
+                    <!-- LIKED TWEETS -->
+                    {% if session["status"] == 4 %}
+                        {% if (session["most_liked"])|length  == 0 %}
+                                    <div class="container-fluid" style="margin-top:2rem;">
+                                        <div class="alert alert-warning d-flex align-items-center" role="alert" style="width-auto margin-left:19rem;">
+                                            <div>
+                                                <i class="bi bi-exclamation-circle"> This user haven't got a like yet!</i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                
+                        {% else %}
+                            <div class="container-fluid" style="margin-top:2rem;">
+                                <button type="button" class="list-group-item list-group-item-action active" aria-current="true">
+                                    <i class="bi bi-heart">  Most Liked tweets by {{session["user_name"]}}:</i>  
+                                </button>
+                                {% for tw in session["most_liked"] %}
+                                    <div class="tweet" tweet-id={{tw[1]}}></div>
+                                {% endfor %}
+                            </div>
+                        {% endif  %}
+                    {% endif  %}
+
+                    <!-- RETWEETED TWEETS -->
+                    {% if session["status"] == 5 %}
+                        {% if (session["most_ret"])|length  == 0 %}
+                                <div class="container-fluid" style="margin-top:2rem;">
+                                    <div class="alert alert-warning d-flex align-items-center" role="alert" style="width-auto margin-left:19rem;">
+                                        <div>
+                                            <i class="bi bi-exclamation-circle"> This user haven't got a retweet yet!</i>
+                                        </div>
+                                    </div>
+                                </div>
+                            
+                        {% else %}
+                            <div class="container-fluid" style="margin-top:2rem;">
+                                <button type="button" class="list-group-item list-group-item-action active" aria-current="true">
+                                    <i class="bi bi-reply">  Most Liked tweets by {{session["user_name"]}}:</i>  
+                                </button>
+                                {% for tw in session["most_ret"] %}
+                                    <div class="tweet" tweet-id={{tw[1]}}></div>
+                                {% endfor %}
+                            </div>
+                        
+                        {% endif  %}
+                    {% endif  %}
+
+                    
+                </div>
+                
+
+                <div class="col">
+                    <!-- FUNCTIONALITIES -->
+                    <form method ="post" action="/tweetMiner/res">
+                        <div class="container-btns align-items-center" style="margin-top:2rem;">
+                            <div class="d-grid gap-2 d-md-flex my-auto">
+                                <div class="d-grid gap-3 col-8 mx-auto" style="margin-top:1.5rem;">
+                                    <button class="btn btn-primary" type="submit" name="most_hash" value="most_hash">Most Used #</button>
+                                    <button class="btn btn-primary" type="submit" name="most_at" value="most_at">Most Interected @</button>
+
+                                    <button class="btn btn-primary" type="submit" name="most_lkd" value="most_lkd">Most Liked Tweets</button>
+                                    <button class="btn btn-primary" type="submit" name="most_ret" value="most_ret">Most Retweeted Tweets</button>
+                    </form>
+
+                                    <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#most_word_filter" aria-expanded="false" aria-controls="most_word_filter">
+                                        Most Common Word
+                                    </button>
+                                    <div class="collapse" id="most_word_filter">
+                                        <div class="card card-body">
+                                            <form method ="post" action="/tweetMiner/res">
+
+                                                <div class="input-group flex-nowrap">
+                                                    <span class="input-group-text" id="addon-wrapping"><i class="bi bi-funnel"></i></span>
+                                                    <input type="text" class="form-control" name="filters" placeholder="filters" aria-label="Filters" aria-describedby="addon-wrapping">
+                                                </div>
+                                            
+                                                <div class="form-check" style="position:relative left:12rem;" >
+                                                    <input class="form-check-input" type="checkbox" name="filter_on" value="filter_on" id="filter_check">
+                                                    <label class="form-check-label" for="flexCheckDefault">Filter</label>
+                                                    <button type="button"  class="btn btn-outline-secondary btn-sm" style="position;relative; margin-top:-2rem; margin-left:10rem;" data-bs-container="body" data-bs-toggle="info" data-bs-placement="right" data-bs-content="If ypu wish to filter words, type them with spaces in between and no comma."><i class="bi bi-info-circle" ></i></button>
+                                                </div>
+
+                                                <button class="btn btn-primary" style="position:relative; left:6rem;" type="submit" name="most_word" value="most_word">Go</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                
+                            </div>
+                        </div>
+                </div>
+            </div>
+
+        </div>
+
+        
+
+        <!-- Enabling popovers -->
+        <script>
+            var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="info"]'))
+            var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+            return new bootstrap.Popover(popoverTriggerEl)
+            });
+        </script>
+
+        <!-- EMBEDDING TWEETS -->
+        <script>
+            $(".tweet").each(function(t,tweet ) { 
+                var id = $(this).attr('tweet-id');
+                twttr.widgets.createTweet(id, tweet);
+            });
+        </script>
+
+
+       
+
+    </body>
+
+
+
+</html>
